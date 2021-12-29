@@ -43,13 +43,13 @@ def run():
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=config.args.train_batch_size,
-        num_workers=2
+        num_workers=4
     )
 
     valid_dataloader = DataLoader(
         valid_dataset,
         batch_size=config.args.valid_batch_size,
-        num_workers=2
+        num_workers=4
     )
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -76,7 +76,7 @@ def run():
     )
 
     model = nn.DataParallel(model)
-    
+
     best_accuracy=0
     for epoch in range(config.args.epochs):
         engine.train_fn(train_dataloader,model,optimizer,scheduler,device)
