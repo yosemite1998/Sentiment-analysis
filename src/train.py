@@ -11,7 +11,6 @@ from sklearn import metrics
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from transformers import get_linear_scheduler_with_warmup
 
 def run():
     dfx = pd.read_csv(config.args.training_file).fillna("none")
