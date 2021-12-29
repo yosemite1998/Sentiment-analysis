@@ -60,14 +60,14 @@ def run():
     param_optimizer = list(model.named_parameters())
     no_decay = ["bias","LayerNorm.bias","LayerNorm.weight"]
     optimizer_parameters = [
-        {'param': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],'weight_decay':0.001},
-        {'param': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)],'weight_decay':0.0}
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],'weight_decay':0.001},
+        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)],'weight_decay':0.0}
     ]
 
     #num_train_steps = int(len(df_train)/args.train_batch_size * args.epochs)
     # optimizer and scheduler
-    optimizer = torch.optim.AdamW(params=optimizer_parameters,lr=3e-5)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+    optimizer = torch.optim.AdamW(optimizer_parameters,lr=3e-5)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
         optimizer=optimizer,
         T_0=5, 
         T_mult=1, 
@@ -75,6 +75,8 @@ def run():
         last_epoch=-1
     )
 
+    model = nn.DataParallel(model)
+    
     best_accuracy=0
     for epoch in range(config.args.epochs):
         engine.train_fn(train_dataloader,model,optimizer,scheduler,device)
