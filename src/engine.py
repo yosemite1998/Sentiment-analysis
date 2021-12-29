@@ -13,15 +13,15 @@ def train_fn(data_loader, model, optimizer, scheduler, device):
     for bi, d in tqdm(enumerate(data_loader),total=len(data_loader)):
         # get item data
         input_ids = d["input_ids"]
-        token_type_ids = d["token_type_ids"]
         attention_mask = d["attention_mask"]
+        token_type_ids = d["token_type_ids"]
         targets = d["targets"]
 
         # send to devie
         input_ids = input_ids.to(device, dtype=torch.long)
         token_type_ids = token_type_ids.to(device, dtype=torch.long)
         attention_mask = attention_mask.to(device, dtype=torch.long)
-        targets = targets.to(device, dtype=torch.long)
+        targets = targets.to(device, dtype=torch.float)
 
         # optimizer initialization
         optimizer.zero_grad()
@@ -56,7 +56,7 @@ def valid_fn(data_loader, model, device):
             input_ids = input_ids.to(device, dtype=torch.long)
             token_type_ids = token_type_ids.to(device, dtype=torch.long)
             attention_mask = attention_mask.to(device, dtype=torch.long)
-            targets = targets.to(device, dtype=torch.long)
+            targets = targets.to(device, dtype=torch.float)
 
             # forward 
             outputs = model(
@@ -66,7 +66,7 @@ def valid_fn(data_loader, model, device):
             )
 
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
-            fin_outputs.extend(torch.sigmoid(outputs.cpu().detach().numpy().tolist()))
+            fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
     return fin_targets, fin_outputs
         
             
