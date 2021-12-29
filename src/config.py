@@ -5,7 +5,7 @@ class args:
     train_batch_size = 8
     valid_batch_size = 4
     epochs = 10
-    bert_path = "bert-base-uncased"
+    bert_path = "../input/huggingface-bert/bert-base-cased"
     model_path = "pytoch_model.bin"
     training_file = "../input/imdb-dataset-of-50k-movie-reviews/IMDB Dataset.csv"
     tokenizer = transformers.BertTokenizer.from_pretrained(
