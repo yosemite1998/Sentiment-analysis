@@ -14,7 +14,7 @@ class args:
     #     do_lower_case=True
     # )   
     # for kaggle remote
-    bert_path = "/kaggle/input/huggingface-bert/bert-base-cased"
+    bert_path = "/kaggle/input/huggingface-bert/bert-base-uncased"
     training_file = "/kaggle/input/imdb-dataset-of-50k-movie-reviews/IMDB Dataset.csv"
     model_path = "pytorch_model.bin"
     tokenizer = transformers.BertTokenizer.from_pretrained(
