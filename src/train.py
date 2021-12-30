@@ -13,8 +13,8 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 def run():
-    dfx = pd.read_csv(config.args.training_file,nrows=200).fillna("none")
-    #dfx = pd.read_csv(config.args.training_file).fillna("none")
+    # dfx = pd.read_csv(config.args.training_file,nrows=200).fillna("none")
+    dfx = pd.read_csv(config.args.training_file).fillna("none")
     dfx.sentiment = dfx.sentiment.apply(
         lambda text: 1 if text=='positive' else 0
     )
