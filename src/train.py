@@ -13,6 +13,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 def run():
+    #dfx = pd.read_csv(config.args.training_file,nrows=20).fillna("none")
     dfx = pd.read_csv(config.args.training_file).fillna("none")
     dfx.sentiment = dfx.sentiment.apply(
         lambda text: 1 if text=='positive' else 0
@@ -49,8 +50,11 @@ def run():
     valid_dataloader = DataLoader(
         valid_dataset,
         batch_size=config.args.valid_batch_size,
-        num_workers=4
+        num_workers=1
     )
+
+    for i, d in enumerate(valid_dataloader):
+        print("#{}: {}".format(i, d))
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -64,7 +68,6 @@ def run():
         {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)],'weight_decay':0.0}
     ]
 
-    #num_train_steps = int(len(df_train)/args.train_batch_size * args.epochs)
     # optimizer and scheduler
     optimizer = torch.optim.AdamW(optimizer_parameters,lr=3e-5)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
@@ -80,8 +83,9 @@ def run():
     best_accuracy=0
     for epoch in range(config.args.epochs):
         engine.train_fn(train_dataloader,model,optimizer,scheduler,device)
-        outputs, targets = engine.valid_fn(valid_dataloader,model,device)
+        targets, outputs = engine.valid_fn(valid_dataloader,model,device)
         outputs = np.array(outputs) >=0.5
+        outputs = outputs.squeeze().tolist()
         accuracy = metrics.accuracy_score(targets,outputs)
         print(f"#{epoch} Epoch - Accuracy score:{accuracy}")
         if accuracy > best_accuracy:
