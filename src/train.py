@@ -53,9 +53,6 @@ def run():
         num_workers=1
     )
 
-    for i, d in enumerate(valid_dataloader):
-        print("#{}: {}".format(i, d))
-
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     model = BertBaseUncased()
