@@ -8,7 +8,7 @@ class args:
     epochs = 10
     # for kaggle remote
     bert_path = "/Users/kenchen/Documents/GitHub/Sentiment-analysis/input/bert-base-uncased"
-    training_file = "/Users/kenchen/Documents/GitHub/Sentiment-analysis/input/IMDB Dataset.csv"
+    training_file = "/Users/kenchen/Documents/GitHub/Sentiment-analysis/input/imdb.csv"
     model_path = "/Users/kenchen/Documents/GitHub/Sentiment-analysis/output/model.bin"
     bert_model = transformers.BertModel.from_pretrained(
         bert_path,

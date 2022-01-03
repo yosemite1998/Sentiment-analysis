@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import pandas as pd
+import torch
 
 from dataset import BERTDataset
 from custom_model import BertBaseUncased
@@ -18,9 +19,9 @@ if  __name__ == "__main__":
         review=np.array([review]),
         targets=np.array([1.0])
     )
-
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     test_model = BertBaseUncased(num_train_steps=0)
-    test_model.load(config.args.model_path)
+    test_model.load(config.args.model_path, device=device)
     outputs = test_model.predict(test_dataset,batch_size=1)
     for p in outputs:
         y = lambda x: sigmoid(x)
@@ -38,8 +39,6 @@ if  __name__ == "__main__":
         targets=df_test.sentiment.values
     )
 
-    test_model = BertBaseUncased(num_train_steps=0)
-    test_model.load(config.args.model_path)
     outputs = test_model.predict(test_dataset,batch_size=1)
     i = 0
     for p in outputs:

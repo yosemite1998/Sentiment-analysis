@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import tez
 from sklearn.metrics import accuracy_score
-from transformers import AdamW, get_linear_schedule_with_warmup
+import transformers
 
 import config
 
@@ -10,7 +10,7 @@ class BertBaseUncased(tez.Model):
     def __init__(self,num_train_steps):
         super().__init__()
         self.bert = config.args.bert_model
-        self.tokenizer = config.tokenizer
+        self.tokenizer = config.args.tokenizer
 
         self.bert_drop = nn.Dropout(0.3)
         self.out = nn.Linear(768, 1)

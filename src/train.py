@@ -36,10 +36,10 @@ def run():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    n_train_steps = int(len(df_train) / args.train_batch_size * args.epochs)
+    n_train_steps = int(len(df_train) / config.args.train_batch_size * config.args.epochs)
     model = BertBaseUncased(num_train_steps=n_train_steps)
 
-    #model = nn.DataParallel(model)
+    #model = nn.DataParallel(model)y
     tb_logger = tez.callbacks.TensorBoardLogger(log_dir="./")
     es = tez.callbacks.EarlyStopping(
         monitor="valid_loss",
