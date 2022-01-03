@@ -1,13 +1,7 @@
-from torch import dtype
 import torch
-import torch.nn as nn
 from tqdm import tqdm
-import dataset
 
-def loss_fn(outputs, targets):
-    return nn.BCEWithLogitsLoss()(outputs, targets.view(-1, 1))    
-
-def train_fn(data_loader, model, optimizer, scheduler, device):
+def train_fn(data_loader, model, device):
     model.train()
 
     for bi, d in tqdm(enumerate(data_loader),total=len(data_loader)):
@@ -23,22 +17,14 @@ def train_fn(data_loader, model, optimizer, scheduler, device):
         attention_mask = attention_mask.to(device, dtype=torch.long)
         targets = targets.to(device, dtype=torch.float)
 
-        # optimizer initialization
-        optimizer.zero_grad()
 
         # forward 
         outputs = model(
             input_ids=input_ids,
             token_type_ids=token_type_ids,
-            attention_mask=attention_mask
+            attention_mask=attention_mask,
+            targets=targets
         )
-
-        # loss 
-        loss = loss_fn(outputs,targets)
-        loss.backward()
-        optimizer.step()
-        scheduler.step()
-
 
 def valid_fn(data_loader, model, device):
     model.eval()
